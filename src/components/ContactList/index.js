@@ -45,6 +45,16 @@ const ContactList = ({ contacts, onSetContacts }) => {
     setCheckedIds([])
   }
 
+  const handleDeleteCurrent = (contactId) => {
+    onSetContacts((contacts) => {
+      var savedItems = localStorage.getItem("contacts")
+      var listOfContacts = JSON.parse(savedItems)
+      var newList = listOfContacts.filter((contact) => contact.id != contactId)
+      localStorage.setItem("contacts", JSON.stringify(newList))
+      return newList;
+    })
+  }
+
   return (
     <table>
       <caption>Contacts</caption>
@@ -59,7 +69,13 @@ const ContactList = ({ contacts, onSetContacts }) => {
       </thead>
       <tbody>
         {
-          contacts.map((contact, i) => <Contact onToggleContactFromList={toggleContactFromList} checkedIds={checkedIds} contactData={contact} key={`contact-${i}`} />)
+          contacts.map((contact, i) => <Contact
+            onToggleContactFromList={toggleContactFromList}
+            checkedIds={checkedIds}
+            contactData={contact}
+            key={`contact-${i}`}
+            onDelete={handleDeleteCurrent}
+          />)
         }
 
       </tbody>
